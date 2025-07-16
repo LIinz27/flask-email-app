@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Email Terkirim{% endblock %}
+
+{% block content %}
+<div class="email-list">
+    {% if emails %}
+        {% for email in emails %}
+        <a href="{{ url_for('email_detail', email_id=email.id) }}" class="email-item">
+            <div class="email-sender">
+                <span class="material-icons" style="font-size: 20px; margin-right: 8px;">person</span>
+                {{ email.receiver_name }}
+            </div>
+            <div class="email-subject">
+                {{ email.subject }}
+                <span style="color: var(--secondary); margin-left: 8px;">- {{ email.message[:50] }}{% if email.message|length > 50 %}...{% endif %}</span>
+            </div>
+            <div class="email-time">
+                {{ email.timestamp.strftime('%H:%M') if email.timestamp.date() == today else email.timestamp.strftime('%d/%m/%Y') }}
+            </div>
+        </a>
+        {% endfor %}
+    {% else %}
+        <div class="email-item" style="justify-content: center; color: var(--secondary);">
+            <span class="material-icons" style="margin-right: 8px;">send</span>
+            Tidak ada email terkirim
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

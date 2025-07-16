@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Draft{% endblock %}
+
+{% block content %}
+<div class="email-list">
+  {% if drafts %}
+    {% for draft in drafts %}
+      <a href="{{ url_for('compose', draft_id=draft.id) }}" class="email-item">
+        <div class="email-sender">{{ draft.receiver_name or '(Belum diisi)' }}</div>
+        <div class="email-subject">{{ draft.subject or '(Tanpa Subjek)' }}</div>
+        <div class="email-time">{{ draft.timestamp.strftime('%d/%m/%Y %H:%M') if draft.timestamp else '' }}</div>
+      </a>
+    {% endfor %}
+  {% else %}
+    <div style="padding: 24px; text-align: center; color: var(--secondary);">Tidak ada draft.</div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Kotak Masuk{% endblock %}
+
+{% block content %}
+<div class="email-list">
+    {% if emails %}
+        {% for email in emails %}
+        <a href="{{ url_for('email_detail', email_id=email.id) }}" class="email-item {% if not email.is_read %}unread{% endif %}">
+            <div class="email-sender">
+                {% if not email.is_read %}
+                <span class="unread-dot"></span>
+                {% endif %}
+                <span class="material-icons" style="font-size: 20px; margin-right: 8px;">account_circle</span>
+                {{ email.sender_name }}
+            </div>
+            <div class="email-subject">
+                {{ email.subject }}
+                <span style="color: var(--secondary); margin-left: 8px;">- {{ email.message[:50] }}{% if email.message|length > 50 %}...{% endif %}</span>
+            </div>
+            <div class="email-time">
+                {{ email.timestamp.strftime('%H:%M') if email.timestamp.date() == today else email.timestamp.strftime('%d/%m/%Y') }}
+            </div>
+        </a>
+        {% endfor %}
+    {% else %}
+        <div class="email-item" style="justify-content: center; color: var(--secondary);">
+            <span class="material-icons" style="margin-right: 8px;">inbox</span>
+            Tidak ada email di kotak masuk
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

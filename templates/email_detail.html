@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block page_title %}{{ email.subject }}{% endblock %}
+
+{% block content %}
+<div class="email-detail">
+    <div class="email-header">
+        <div class="d-flex justify-content-between align-items-start">
+            <h1 class="email-subject-header">{{ email.subject }}</h1>
+            <a href="{{ url_for('toggle_favorite', email_id=email.id) }}" class="btn {% if email.is_favorite %}btn-warning{% else %}btn-outline-warning{% endif %}" style="margin-left: 16px;">
+                <span class="material-icons">{% if email.is_favorite %}star{% else %}star_border{% endif %}</span>
+                {% if email.is_favorite %}Hapus dari Favorit{% else %}Tambahkan ke Favorit{% endif %}
+            </a>
+        </div>
+        <div class="email-meta">
+            <span>Dari:</span>
+            <div>
+                <span class="material-icons" style="font-size: 20px; vertical-align: middle; margin-right: 8px;">account_circle</span>
+                {{ email.sender_name }}
+            </div>
+            <span>Ke:</span>
+            <div>
+                <span class="material-icons" style="font-size: 20px; vertical-align: middle; margin-right: 8px;">person</span>
+                {{ email.receiver_name }}
+            </div>
+            <span>Waktu:</span>
+            <div>
+                <span class="material-icons" style="font-size: 20px; vertical-align: middle; margin-right: 8px;">schedule</span>
+                {{ email.timestamp.strftime('%d/%m/%Y %H:%M') }}
+            </div>
+        </div>
+    </div>
+    <div class="email-content">
+        {{ email.message }}
+    </div>
+    <div style="margin-top: 24px;">
+        <a href="{{ url_for('compose') }}?reply_to={{ email.sender_name }}&subject=Re: {{ email.subject }}" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <span class="material-icons">reply</span>
+            Balas
+        </a>
+        <a href="{{ url_for('inbox') }}" class="btn" style="text-decoration: none; margin-left: 16px; display: inline-flex; align-items: center; gap: 8px;">
+            <span class="material-icons">arrow_back</span>
+            Kembali
+        </a>
+    </div>
+</div>
+{% endblock %}

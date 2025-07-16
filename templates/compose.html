@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Tulis Email{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <form method="post">
+        <div class="form-group">
+            <label for="receiver">
+                <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">person</span>
+                Kepada (Username):
+            </label>
+            <input type="text" id="receiver" name="receiver" required value="{{ draft.receiver_name if draft else request.args.get('reply_to', '') }}">
+        </div>
+        <div class="form-group">
+            <label for="subject">
+                <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">subject</span>
+                Subjek:
+            </label>
+            <input type="text" id="subject" name="subject" required value="{{ draft.subject if draft else request.args.get('subject', '') }}">
+        </div>
+        <div class="form-group">
+            <label for="message">
+                <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">message</span>
+                Pesan:
+            </label>
+            <textarea id="message" name="message" rows="12" required>{{ draft.message if draft else '' }}</textarea>
+        </div>
+        <div style="display: flex; gap: 16px;">
+            <button type="submit" name="action" value="send" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                <span class="material-icons">send</span>
+                Kirim
+            </button>
+            <button type="submit" name="action" value="draft" class="btn" style="display: inline-flex; align-items: center; gap: 8px; background: #e0e7ef; color: #1a73e8;">
+                <span class="material-icons">save</span>
+                Simpan Draft
+            </button>
+            <a href="{{ url_for('inbox') }}" class="btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                <span class="material-icons">close</span>
+                Batal
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
+    <div class="app-container">
+        {% if 'user_id' in session %}
+        <nav class="sidebar">
+            <a href="{{ url_for('compose') }}" class="compose-btn">
+                <span class="material-icons">edit</span>
+                Tulis
+            </a>
+            <a href="{{ url_for('inbox') }}" class="nav-item {% if request.endpoint == 'inbox' %}active{% endif %}">
+                <span class="material-icons">inbox</span>
+                Kotak Masuk
+                <span class="unread-badge" id="unreadBadge" style="display: none;"></span>
+            </a>
+            <a href="{{ url_for('sent') }}" class="nav-item {% if request.endpoint == 'sent' %}active{% endif %}">
+                <span class="material-icons">send</span>
+                Terkirim
+            </a>
+            <a href="{{ url_for('drafts') }}" class="nav-item {% if request.endpoint == 'drafts' %}active{% endif %}">
+                <span class="material-icons">drafts</span>
+                Draft
+            </a>
+            <a href="{{ url_for('favorites') }}" class="nav-item {% if request.endpoint == 'favorites' %}active{% endif %}">
+                <span class="material-icons">star</span>
+                Favorit
+            </a>
+            <a href="{{ url_for('profile') }}" class="nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
+                <span class="material-icons">account_circle</span>
+                Profil
+            </a>
+            <a href="{{ url_for('logout') }}" class="nav-item">
+                <span class="material-icons">logout</span>
+                Keluar
+            </a>
+        </nav>
+        {% endif %}
+        <main class="main-content">
+            <div class="header">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <h2>{% block page_title %}{% endblock %}</h2>
+                  {% if session.get('username') %}
+                    <span style="font-size: 1.1em; color: var(--primary); font-weight: 500;">Welcome, {{ session['username']}}</span>
+                  {% endif %}
+                </div>
+                <button class="mode-toggle" id="modeToggle" onclick="toggleMode()">
+                    <span class="material-icons">dark_mode</span>
+                </button>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+    function toggleMode() {
+        const body = document.body;
+        body.classList.toggle('dark-mode');
+        if(body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            document.querySelector('#modeToggle .material-icons').textContent = 'light_mode';
+        } else {
+            localStorage.setItem('theme', 'light');
+            document.querySelector('#modeToggle .material-icons').textContent = 'dark_mode';
+        }
+    }
+
+    function updateUnreadCount() {
+        fetch('/unread_count')
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('unreadBadge');
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = 'inline-flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            });
+    }
+
+    (function() {
+        const theme = localStorage.getItem('theme');
+        if(theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('#modeToggle .material-icons').textContent = 'light_mode';
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.querySelector('#modeToggle .material-icons').textContent = 'dark_mode';
+        }
+        
+        // Update unread count immediately and every 30 seconds
+        updateUnreadCount();
+        setInterval(updateUnreadCount, 30000);
+        
+        // Update unread count when the page becomes visible
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                updateUnreadCount();
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

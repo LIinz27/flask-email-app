@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Profil{% endblock %}
+
+{% block content %}
+<div class="profile-info">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user.username[0]|upper }}
+        </div>
+        <div class="profile-details">
+            <h1 class="profile-username">{{ user.username }}</h1>
+            <p class="profile-email">{{ user.email }}</p>
+        </div>
+    </div>
+    
+    <div style="margin-top: 32px;">
+        <a href="{{ url_for('change_password') }}" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <span class="material-icons">lock</span>
+            Ubah Password
+        </a>
+    </div>
+</div>
+{% endblock %}

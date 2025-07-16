@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block page_title %}Favorit{% endblock %}
+
+{% block content %}
+<div class="email-list">
+    {% if emails %}
+        {% for email in emails %}
+        <a href="{{ url_for('email_detail', email_id=email.id) }}" class="email-item {% if not email.is_read and email.receiver_id == session.user_id %}unread{% endif %}">
+            <div class="email-item-header">
+                {% if email.receiver_id == session.user_id %}
+                    <span class="sender-name">
+                        <span class="material-icons" style="font-size: 20px;">account_circle</span>
+                        {{ email.sender_name }}
+                    </span>
+                {% else %}
+                    <span class="receiver-name">
+                        <span class="material-icons" style="font-size: 20px;">person</span>
+                        Kepada: {{ email.receiver_name }}
+                    </span>
+                {% endif %}
+                <span class="email-time">
+                    <span class="material-icons" style="font-size: 20px;">schedule</span>
+                    {{ email.timestamp.strftime('%d/%m/%Y %H:%M') if email.timestamp else '' }}
+                </span>
+            </div>
+            <div class="email-item-content">
+                <div class="email-subject">{{ email.subject }}</div>
+                <div class="email-preview">{{ email.message[:100] }}{% if email.message|length > 100 %}...{% endif %}</div>
+            </div>
+            <div class="email-item-actions">
+                <span class="material-icons text-warning">star</span>
+            </div>
+        </a>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <span class="material-icons" style="font-size: 48px;">star_border</span>
+            <p>Belum ada email yang ditandai sebagai favorit</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
