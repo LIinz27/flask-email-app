@@ -6,7 +6,7 @@
 <div class="email-list">
     {% if emails %}
         {% for email in emails %}
-        <a href="{{ url_for('email_detail', email_id=email.id) }}" class="email-item">
+        <a href="{{ url_for('email.email_detail', email_id=email.id) }}" class="email-item">
             <div class="email-sender">
                 <span class="material-icons" style="font-size: 20px; margin-right: 8px;">person</span>
                 {{ email.receiver_name }}

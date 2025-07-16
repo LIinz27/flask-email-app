@@ -1,3 +1,7 @@
 Flask
+Flask-WTF
+Flask-Bcrypt
+Flask-Login
+Flask-Migrate
 mysql-connector-python
 bcrypt

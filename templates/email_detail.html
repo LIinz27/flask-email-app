@@ -7,7 +7,7 @@
     <div class="email-header">
         <div class="d-flex justify-content-between align-items-start">
             <h1 class="email-subject-header">{{ email.subject }}</h1>
-            <a href="{{ url_for('toggle_favorite', email_id=email.id) }}" class="btn {% if email.is_favorite %}btn-warning{% else %}btn-outline-warning{% endif %}" style="margin-left: 16px;">
+            <a href="{{ url_for('email.toggle_favorite', email_id=email.id) }}" class="btn {% if email.is_favorite %}btn-warning{% else %}btn-outline-warning{% endif %}" style="margin-left: 16px;">
                 <span class="material-icons">{% if email.is_favorite %}star{% else %}star_border{% endif %}</span>
                 {% if email.is_favorite %}Hapus dari Favorit{% else %}Tambahkan ke Favorit{% endif %}
             </a>
@@ -34,11 +34,11 @@
         {{ email.message }}
     </div>
     <div style="margin-top: 24px;">
-        <a href="{{ url_for('compose') }}?reply_to={{ email.sender_name }}&subject=Re: {{ email.subject }}" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ url_for('email.compose') }}?reply_to={{ email.sender_name }}&subject=Re: {{ email.subject }}" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
             <span class="material-icons">reply</span>
             Balas
         </a>
-        <a href="{{ url_for('inbox') }}" class="btn" style="text-decoration: none; margin-left: 16px; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ url_for('email.inbox') }}" class="btn" style="text-decoration: none; margin-left: 16px; display: inline-flex; align-items: center; gap: 8px;">
             <span class="material-icons">arrow_back</span>
             Kembali
         </a>

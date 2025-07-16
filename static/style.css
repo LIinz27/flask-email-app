@@ -56,6 +56,8 @@ body.dark-mode ::selection {
 .app-container {
   display: flex;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -135,6 +137,8 @@ body.dark-mode .nav-item.active {
   flex: 1;
   padding: 24px;
   background: transparent;
+  max-width: calc(100vw - 256px);
+  overflow-x: hidden;
 }
 
 
@@ -164,6 +168,8 @@ body.dark-mode .header {
   background: var(--card);
   box-shadow: 0 1px 3px var(--shadow);
   transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .email-item {
@@ -198,6 +204,37 @@ body.dark-mode .email-item {
 
 body.dark-mode .email-item:hover {
   background: var(--dark-hover);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -256px;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main-content {
+    max-width: 100vw;
+    padding: 16px;
+  }
+
+  .email-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .compose-btn {
+    width: 100%;
+  }
 }
 
 .email-sender {

@@ -6,7 +6,7 @@
 <div class="email-list">
     {% if emails %}
         {% for email in emails %}
-        <a href="{{ url_for('email_detail', email_id=email.id) }}" class="email-item {% if not email.is_read and email.receiver_id == session.user_id %}unread{% endif %}">
+        <a href="{{ url_for('email.email_detail', email_id=email.id) }}" class="email-item {% if not email.is_read and email.receiver_id == session.user_id %}unread{% endif %}">
             <div class="email-item-header">
                 {% if email.receiver_id == session.user_id %}
                     <span class="sender-name">

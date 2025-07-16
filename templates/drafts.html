@@ -6,11 +6,16 @@
 <div class="email-list">
   {% if drafts %}
     {% for draft in drafts %}
-      <a href="{{ url_for('compose', draft_id=draft.id) }}" class="email-item">
-        <div class="email-sender">{{ draft.receiver_name or '(Belum diisi)' }}</div>
-        <div class="email-subject">{{ draft.subject or '(Tanpa Subjek)' }}</div>
-        <div class="email-time">{{ draft.timestamp.strftime('%d/%m/%Y %H:%M') if draft.timestamp else '' }}</div>
-      </a>
+      <div style="display: flex; align-items: center;">
+        <a href="{{ url_for('email.compose', draft_id=draft.id) }}" class="email-item" style="flex:1;">
+          <div class="email-sender">{{ draft.receiver_name or '(Belum diisi)' }}</div>
+          <div class="email-subject">{{ draft.subject or '(Tanpa Subjek)' }}</div>
+          <div class="email-time">{{ draft.timestamp.strftime('%d/%m/%Y %H:%M') if draft.timestamp else '' }}</div>
+        </a>
+        <form method="post" action="{{ url_for('email.delete_draft', draft_id=draft.id) }}" style="margin:0;">
+          <button type="submit" class="btn btn-danger" style="margin-left:8px;">Hapus</button>
+        </form>
+      </div>
     {% endfor %}
   {% else %}
     <div style="padding: 24px; text-align: center; color: var(--secondary);">Tidak ada draft.</div>

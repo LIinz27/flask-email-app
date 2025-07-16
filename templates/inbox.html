@@ -6,7 +6,7 @@
 <div class="email-list">
     {% if emails %}
         {% for email in emails %}
-        <a href="{{ url_for('email_detail', email_id=email.id) }}" class="email-item {% if not email.is_read %}unread{% endif %}">
+        <a href="{{ url_for('email.email_detail', email_id=email.id) }}" class="email-item {% if not email.is_read %}unread{% endif %}">
             <div class="email-sender">
                 {% if not email.is_read %}
                 <span class="unread-dot"></span>

@@ -12,32 +12,32 @@
     <div class="app-container">
         {% if 'user_id' in session %}
         <nav class="sidebar">
-            <a href="{{ url_for('compose') }}" class="compose-btn">
+            <a href="{{ url_for('email.compose') }}" class="compose-btn">
                 <span class="material-icons">edit</span>
                 Tulis
             </a>
-            <a href="{{ url_for('inbox') }}" class="nav-item {% if request.endpoint == 'inbox' %}active{% endif %}">
+            <a href="{{ url_for('email.inbox') }}" class="nav-item {% if request.endpoint == 'inbox' %}active{% endif %}">
                 <span class="material-icons">inbox</span>
                 Kotak Masuk
                 <span class="unread-badge" id="unreadBadge" style="display: none;"></span>
             </a>
-            <a href="{{ url_for('sent') }}" class="nav-item {% if request.endpoint == 'sent' %}active{% endif %}">
+            <a href="{{ url_for('email.sent') }}" class="nav-item {% if request.endpoint == 'sent' %}active{% endif %}">
                 <span class="material-icons">send</span>
                 Terkirim
             </a>
-            <a href="{{ url_for('drafts') }}" class="nav-item {% if request.endpoint == 'drafts' %}active{% endif %}">
+            <a href="{{ url_for('email.drafts') }}" class="nav-item {% if request.endpoint == 'drafts' %}active{% endif %}">
                 <span class="material-icons">drafts</span>
                 Draft
             </a>
-            <a href="{{ url_for('favorites') }}" class="nav-item {% if request.endpoint == 'favorites' %}active{% endif %}">
+            <a href="{{ url_for('email.favorites') }}" class="nav-item {% if request.endpoint == 'favorites' %}active{% endif %}">
                 <span class="material-icons">star</span>
                 Favorit
             </a>
-            <a href="{{ url_for('profile') }}" class="nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
+            <a href="{{ url_for('profile.profile') }}" class="nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
                 <span class="material-icons">account_circle</span>
                 Profil
             </a>
-            <a href="{{ url_for('logout') }}" class="nav-item">
+            <a href="{{ url_for('auth.logout') }}" class="nav-item">
                 <span class="material-icons">logout</span>
                 Keluar
             </a>
