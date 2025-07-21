@@ -1,0 +1,38 @@
+/* Theme variables */
+:root {
+  /* Light theme */
+  --primary: #1a73e8;
+  --primary-light: #b3d1fa;
+  --secondary: #5f6368;
+  --text: #202124;
+  --border: #b3c2d1;
+  --hover: #d0e2fa;
+  --shadow: rgba(0, 0, 0, 0.08);
+  
+  /* Gradients */
+  --background: linear-gradient(135deg, #e3f0ff 0%, #b3d1fa 100%);
+  --sidebar: linear-gradient(135deg, #e3eafc 0%, #b3d1fa 100%);
+  --card: linear-gradient(135deg, #f0f6ff 0%, #dbeafe 100%);
+
+  /* Dark theme */
+  --dark-primary: #8ab4f8;
+  --dark-text: #e8eaed;
+  --dark-border: #3c4043;
+  --dark-hover: #2a2e3a;
+  --dark-shadow: rgba(0, 0, 0, 0.22);
+  --dark-primary-light: rgba(138, 180, 248, 0.18);
+  
+  /* Dark gradients */
+  --dark-background: linear-gradient(135deg, #232946 0%, #1a2233 100%);
+  --dark-sidebar: linear-gradient(135deg, #232946 0%, #2d2d44 100%);
+  --dark-card: linear-gradient(135deg, #232946 0%, #2d2d44 100%);
+
+  /* Common spacing and sizes */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+}

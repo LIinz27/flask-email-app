@@ -1,0 +1,58 @@
+@import 'variables.css';
+
+/* Email Components */
+.email-list {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: 0 1px 3px var(--shadow);
+  transition: all 0.3s;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.email-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.email-sender { width: 200px; font-weight: 500; }
+.email-subject { flex: 1; }
+.email-time {
+  width: 100px;
+  text-align: right;
+  color: var(--secondary);
+}
+
+.email-item:hover { background: var(--hover); }
+.email-item:last-child { border-bottom: none; }
+.email-item.unread {
+  background: var(--primary-light);
+  font-weight: 500;
+}
+
+/* Dark mode */
+.dark-mode .email-list {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
+}
+
+.dark-mode .email-item {
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+.dark-mode .email-item:hover {
+  background: var(--dark-hover);
+}
+
+.dark-mode .email-item.unread {
+  background: var(--dark-primary-light);
+}

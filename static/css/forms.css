@@ -1,0 +1,65 @@
+@import 'variables.css';
+
+/* Form Components */
+.form-container {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  background: var(--card);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px var(--shadow);
+  border: 1px solid var(--border);
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+  width: 100%;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--secondary);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--text);
+  font-size: 14px;
+  transition: all 0.3s;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+/* Dark mode overrides */
+.dark-mode .form-container {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
+}
+
+.dark-mode .form-group label {
+  color: var(--dark-text);
+}
+
+.dark-mode .form-input {
+  background: var(--dark-background);
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+.dark-mode .form-input:focus {
+  border-color: var(--dark-primary);
+  box-shadow: 0 0 0 2px var(--dark-primary-light);
+}
