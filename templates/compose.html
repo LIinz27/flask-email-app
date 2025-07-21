@@ -2,9 +2,14 @@
 
 {% block page_title %}Tulis Email{% endblock %}
 
+{% block head %}
+<!-- TinyMCE from JSDelivr CDN (no API key required) -->
+<script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <div class="form-container">
-    <form method="post">
+    <form method="post" id="emailForm">
         <div class="form-group">
             <label for="receiver">
                 <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">person</span>
@@ -24,7 +29,7 @@
                 <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">message</span>
                 Pesan:
             </label>
-            <textarea id="message" name="message" rows="12" required>{{ draft.message if draft else '' }}</textarea>
+            <textarea id="message" name="message" class="tinymce-editor">{{ draft.message if draft else '' }}</textarea>
         </div>
         <div style="display: flex; gap: 16px;">
             <button type="submit" name="action" value="send" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
@@ -42,4 +47,126 @@
         </div>
     </form>
 </div>
+
+<script>
+tinymce.init({
+    selector: '.tinymce-editor',
+    height: 400,
+    menubar: false,
+    plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'charmap', 
+        'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | blocks | bold italic forecolor backcolor | ' +
+             'alignleft aligncenter alignright alignjustify | ' +
+             'bullist numlist outdent indent | removeformat | ' +
+             'link | code | help',
+    content_style: 'body { font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif; font-size:14px }',
+    skin: document.body.classList.contains('dark-mode') ? 'oxide-dark' : 'oxide',
+    content_css: document.body.classList.contains('dark-mode') ? 'dark' : 'default',
+    branding: false,
+    promotion: false,
+    resize: true,
+    statusbar: true,
+    elementpath: false,
+    setup: function (editor) {
+        // Auto-save functionality
+        let autoSaveTimer;
+        
+        editor.on('input', function () {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(function() {
+                autoSaveDraft();
+            }, 5000); // Auto-save setelah 5 detik tidak ada input
+        });
+        
+        // Theme switching
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === 'class') {
+                    const isDark = document.body.classList.contains('dark-mode');
+                    editor.dom.setAttrib(editor.getBody(), 'data-mce-theme', isDark ? 'dark' : 'light');
+                }
+            });
+        });
+        
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+});
+
+// Auto-save draft function
+function autoSaveDraft() {
+    // Jangan auto-save jika form kosong
+    const receiver = document.getElementById('receiver').value.trim();
+    const subject = document.getElementById('subject').value.trim();
+    const content = tinymce.get('message').getContent();
+    
+    if (!receiver && !subject && !content) {
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('receiver', receiver);
+    formData.append('subject', subject);
+    formData.append('message', content);
+    formData.append('action', 'auto_draft');
+    
+    fetch(window.location.pathname, {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+        if (response.ok) {
+            // Tampilkan indikator bahwa draft telah disimpan
+            showAutoSaveIndicator();
+        }
+    }).catch(error => {
+        console.log('Auto-save failed:', error);
+    });
+}
+
+function showAutoSaveIndicator() {
+    // Remove existing indicator
+    const existing = document.querySelector('.auto-save-indicator');
+    if (existing) existing.remove();
+    
+    // Create and show indicator
+    const indicator = document.createElement('div');
+    indicator.className = 'auto-save-indicator';
+    indicator.innerHTML = '<span class="material-icons">cloud_done</span> Draft tersimpan otomatis';
+    indicator.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4caf50;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        z-index: 1000;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        transition: opacity 0.3s;
+    `;
+    
+    document.body.appendChild(indicator);
+    
+    // Hide after 2 seconds
+    setTimeout(() => {
+        indicator.style.opacity = '0';
+        setTimeout(() => indicator.remove(), 300);
+    }, 2000);
+}
+
+// Form submission handler
+document.getElementById('emailForm').addEventListener('submit', function(e) {
+    // Update textarea dengan konten dari TinyMCE sebelum submit
+    tinymce.triggerSave();
+});
+</script>
 {% endblock %}

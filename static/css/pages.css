@@ -34,6 +34,83 @@
   white-space: pre-wrap;
 }
 
+/* Rich text content styling */
+.email-content h1, .email-content h2, .email-content h3,
+.email-content h4, .email-content h5, .email-content h6 {
+  margin: 16px 0 8px 0;
+  color: var(--text);
+}
+
+.email-content p {
+  margin: 8px 0;
+}
+
+.email-content ul, .email-content ol {
+  margin: 8px 0;
+  padding-left: 24px;
+}
+
+.email-content li {
+  margin: 4px 0;
+}
+
+.email-content a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.email-content a:hover {
+  text-decoration: underline;
+}
+
+.email-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  margin: 8px 0;
+}
+
+.email-content blockquote {
+  border-left: 4px solid var(--primary);
+  margin: 16px 0;
+  padding: 8px 16px;
+  background: var(--hover);
+  border-radius: var(--radius-sm);
+}
+
+.email-content code {
+  background: var(--hover);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+.email-content pre {
+  background: var(--hover);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+.email-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.email-content th, .email-content td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.email-content th {
+  background: var(--hover);
+  font-weight: 500;
+}
+
 /* Profile */
 .profile-info {
   max-width: 600px;
@@ -91,6 +168,39 @@ body.dark-mode .email-header {
 
 body.dark-mode .email-meta {
   color: var(--dark-secondary);
+}
+
+body.dark-mode .email-content h1,
+body.dark-mode .email-content h2,
+body.dark-mode .email-content h3,
+body.dark-mode .email-content h4,
+body.dark-mode .email-content h5,
+body.dark-mode .email-content h6 {
+  color: var(--dark-text);
+}
+
+body.dark-mode .email-content a {
+  color: var(--dark-primary);
+}
+
+body.dark-mode .email-content blockquote {
+  border-color: var(--dark-primary);
+  background: var(--dark-hover);
+}
+
+body.dark-mode .email-content code,
+body.dark-mode .email-content pre {
+  background: var(--dark-hover);
+  color: var(--dark-text);
+}
+
+body.dark-mode .email-content th,
+body.dark-mode .email-content td {
+  border-color: var(--dark-border);
+}
+
+body.dark-mode .email-content th {
+  background: var(--dark-hover);
 }
 
 body.dark-mode .profile-info {

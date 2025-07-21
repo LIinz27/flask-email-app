@@ -3,9 +3,7 @@
 from flask import Flask, redirect, render_template
 from config import db_config
 import mysql.connector
-import bcrypt
 import os
-import secrets
 
 def get_db():
     return mysql.connector.connect(**db_config)
@@ -64,18 +62,22 @@ def init_db():
 
 
 app = Flask(__name__)
-# Generate new secret key on each restart to invalidate old sessions
-app.secret_key = secrets.token_hex(16)
-print(f"New session secret generated: {app.secret_key[:8]}...")
 
-# Configure session to not be permanent
-app.permanent_session_lifetime = 0  # Session expires when browser closes
+# Session configuration - this is critical
+app.secret_key = 'email-app-secret-key-2025-very-long-and-secure'
+app.config.update(
+    SESSION_COOKIE_NAME='email_session',
+    SESSION_COOKIE_SECURE=False,  # False for HTTP, True for HTTPS
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+    PERMANENT_SESSION_LIFETIME=3600  # 1 hour
+)
 
 # Initialize database tables
 init_db()
 
 # Register Blueprints
-from routes.auth import auth_bp, is_session_valid
+from routes.auth import auth_bp
 from routes.email import email_bp
 from routes.profile import profile_bp
 
@@ -88,21 +90,17 @@ app.register_blueprint(profile_bp)
 def validate_session():
     from flask import request, session, redirect, flash
     
-    # Skip validation untuk auth routes dan static files
-    if (request.endpoint and 
-        (request.endpoint.startswith('auth.') or 
-         request.endpoint.startswith('static') or
-         request.endpoint == 'index')):
+    # Skip validation untuk routes yang tidak memerlukan login
+    skip_routes = ['auth.login', 'auth.register', 'static', 'index', 'email.unread_count']
+    
+    if request.endpoint in skip_routes or (request.endpoint and request.endpoint.startswith('static')):
         return None
     
-    # Validate session untuk route yang membutuhkan login
-    if 'user_id' in session:
-        if not is_session_valid():
-            session.clear()
-            flash('Sesi telah berakhir karena server di-restart. Silakan login kembali.', 'warning')
+    # Check if user is logged in
+    if 'user_id' not in session:
+        if request.endpoint:  # Only redirect if it's a real endpoint
+            flash('Session telah berakhir, silakan login kembali.', 'warning')
             return redirect('/login')
-    elif request.endpoint:  # User belum login
-        return redirect('/login')
 
 # Index route
 @app.route('/')

@@ -93,7 +93,43 @@ def compose(draft_id=None):
             receiver = cursor.fetchone()
             if receiver:
                 receiver_id = receiver['id']
-        if action == 'draft':
+        
+        # Handle auto-save draft
+        if action == 'auto_draft':
+            # Jika ada draft_id, update existing draft
+            if draft:
+                cursor.execute("""
+                    UPDATE emails SET receiver_id=%s, subject=%s, message=%s, is_draft=1 WHERE id=%s AND sender_id=%s
+                """, (receiver_id, subject, message, draft_id, sender_id))
+                db.commit()
+            else:
+                # Cek apakah ada auto-draft existing untuk user ini (draft yang tidak memiliki judul khusus)
+                cursor.execute("""
+                    SELECT id FROM emails WHERE sender_id = %s AND is_draft = 1 
+                    AND (subject = '' OR subject IS NULL OR subject LIKE 'Auto-draft%')
+                    ORDER BY timestamp DESC LIMIT 1
+                """, (sender_id,))
+                existing_auto_draft = cursor.fetchone()
+                
+                if existing_auto_draft:
+                    # Update existing auto-draft
+                    cursor.execute("""
+                        UPDATE emails SET receiver_id=%s, subject=%s, message=%s WHERE id=%s
+                    """, (receiver_id, subject, message, existing_auto_draft['id']))
+                    db.commit()
+                else:
+                    # Create new auto-draft
+                    cursor.execute("""
+                        INSERT INTO emails (sender_id, receiver_id, subject, message, is_draft)
+                        VALUES (%s, %s, %s, %s, 1)
+                    """, (sender_id, receiver_id, subject, message))
+                    db.commit()
+            
+            cursor.close()
+            db.close()
+            return '', 204  # Return success without content for AJAX
+            
+        elif action == 'draft':
             if draft:  # update existing draft
                 cursor.execute("""
                     UPDATE emails SET receiver_id=%s, subject=%s, message=%s, is_draft=1 WHERE id=%s AND sender_id=%s
@@ -201,7 +237,8 @@ def mark_as_read(email_id):
 @email_bp.route('/unread_count')
 def unread_count():
     if 'user_id' not in session:
-        return {'count': 0}
+        from flask import jsonify
+        return jsonify({'count': 0})
     user_id = session['user_id']
     db = get_db()
     cursor = db.cursor(dictionary=True)
@@ -209,7 +246,8 @@ def unread_count():
     result = cursor.fetchone()
     cursor.close()
     db.close()
-    return {'count': result['count']}
+    from flask import jsonify
+    return jsonify({'count': result['count']})
 
 # === FAVORITES ===
 @email_bp.route('/favorites')

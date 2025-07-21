@@ -1,28 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, session, flash
-auth_bp = Blueprint('auth', __name__)
 import bcrypt
 import mysql.connector
 from config import db_config
-import time
-
-# Store server start time to validate sessions
-SERVER_START_TIME = time.time()
 
 def get_db():
     return mysql.connector.connect(**db_config)
-
-def is_session_valid():
-    """Check if session is valid (created after server restart)"""
-    session_time = session.get('created_at', 0)
-    return session_time > SERVER_START_TIME
-
-def create_session(user_id, username):
-    """Create a new session with timestamp"""
-    session.clear()  # Clear any existing session
-    session['user_id'] = user_id
-    session['username'] = username
-    session['created_at'] = time.time()
-    session.permanent = False  # Session expires when browser closes
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -51,11 +33,6 @@ def register():
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    # Clear any existing invalid session
-    if 'user_id' in session and not is_session_valid():
-        session.clear()
-        flash('Sesi telah berakhir, silakan login kembali.', 'info')
-    
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password'].encode('utf-8')
@@ -68,7 +45,11 @@ def login():
         db.close()
 
         if user and bcrypt.checkpw(password, user['password'].encode('utf-8')):
-            create_session(user['id'], user['username'])
+            # Create session
+            session.permanent = True  # Make session permanent
+            session['user_id'] = user['id']
+            session['username'] = user['username']
+            
             flash(f'Selamat datang, {user["username"]}!', 'success')
             return redirect('/inbox')
         else:

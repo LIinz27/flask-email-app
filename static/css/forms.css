@@ -43,6 +43,40 @@ textarea {
   margin: 0;
 }
 
+/* TinyMCE Editor Styling */
+.tinymce-editor {
+  min-height: 300px;
+}
+
+.tox-tinymce {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: none !important;
+}
+
+.tox-toolbar-overlord {
+  background: var(--card) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.tox-edit-area {
+  background: var(--background) !important;
+}
+
+/* Dark mode TinyMCE */
+body.dark-mode .tox-tinymce {
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .tox-toolbar-overlord {
+  background: var(--dark-card) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .tox-edit-area {
+  background: var(--dark-background) !important;
+}
+
 input:focus,
 textarea:focus {
   outline: none;
