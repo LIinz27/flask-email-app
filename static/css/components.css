@@ -44,6 +44,16 @@
   color: #c5221f;
 }
 
+.flash.warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.flash.info {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
 /* Mode Toggle */
 .mode-toggle {
   position: fixed;
@@ -86,6 +96,16 @@ body.dark-mode .flash.success {
 body.dark-mode .flash.danger {
   background: rgba(217, 48, 37, 0.15);
   color: #f28b82;
+}
+
+body.dark-mode .flash.warning {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffda6a;
+}
+
+body.dark-mode .flash.info {
+  background: rgba(13, 202, 240, 0.15);
+  color: #9eeaf9;
 }
 
 body.dark-mode .mode-toggle {

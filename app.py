@@ -4,6 +4,8 @@ from flask import Flask, redirect, render_template
 from config import db_config
 import mysql.connector
 import bcrypt
+import os
+import secrets
 
 def get_db():
     return mysql.connector.connect(**db_config)
@@ -62,19 +64,45 @@ def init_db():
 
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+# Generate new secret key on each restart to invalidate old sessions
+app.secret_key = secrets.token_hex(16)
+print(f"New session secret generated: {app.secret_key[:8]}...")
+
+# Configure session to not be permanent
+app.permanent_session_lifetime = 0  # Session expires when browser closes
 
 # Initialize database tables
 init_db()
 
 # Register Blueprints
-from routes.auth import auth_bp
+from routes.auth import auth_bp, is_session_valid
 from routes.email import email_bp
 from routes.profile import profile_bp
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(email_bp)
 app.register_blueprint(profile_bp)
+
+# Middleware untuk validasi session
+@app.before_request
+def validate_session():
+    from flask import request, session, redirect, flash
+    
+    # Skip validation untuk auth routes dan static files
+    if (request.endpoint and 
+        (request.endpoint.startswith('auth.') or 
+         request.endpoint.startswith('static') or
+         request.endpoint == 'index')):
+        return None
+    
+    # Validate session untuk route yang membutuhkan login
+    if 'user_id' in session:
+        if not is_session_valid():
+            session.clear()
+            flash('Sesi telah berakhir karena server di-restart. Silakan login kembali.', 'warning')
+            return redirect('/login')
+    elif request.endpoint:  # User belum login
+        return redirect('/login')
 
 # Index route
 @app.route('/')
