@@ -1,0 +1,98 @@
+/* Components */
+@import 'variables.css';
+
+/* Buttons */
+.btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: inline-block;
+  margin: var(--spacing-sm) 0;
+  min-width: 120px;
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background: #1557b0;
+  transform: translateY(-1px);
+}
+
+/* Flash Messages */
+.flash {
+  padding: 12px var(--spacing-md);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-md);
+  font-weight: 500;
+}
+
+.flash.success {
+  background: #e6f4ea;
+  color: #1e4620;
+}
+
+.flash.danger {
+  background: #fce8e6;
+  color: #c5221f;
+}
+
+/* Mode Toggle */
+.mode-toggle {
+  position: fixed;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.mode-toggle:hover {
+  background: var(--hover);
+  transform: rotate(12deg);
+}
+
+/* Dark mode for components */
+body.dark-mode .btn-primary {
+  background: var(--dark-primary);
+  color: #232946;
+}
+
+body.dark-mode .btn-primary:hover {
+  background: #7aa4e8;
+}
+
+body.dark-mode .flash.success {
+  background: rgba(52, 168, 83, 0.15);
+  color: #81c995;
+}
+
+body.dark-mode .flash.danger {
+  background: rgba(217, 48, 37, 0.15);
+  color: #f28b82;
+}
+
+body.dark-mode .mode-toggle {
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+body.dark-mode .mode-toggle:hover {
+  background: var(--dark-hover);
+}

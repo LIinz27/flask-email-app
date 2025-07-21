@@ -1,0 +1,101 @@
+/* Sidebar */
+@import 'variables.css';
+
+.sidebar {
+  width: 256px;
+  background: var(--sidebar);
+  padding: var(--spacing-md);
+  border-right: 1px solid var(--border);
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.compose-btn {
+  width: 150px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-sm) 0 var(--spacing-md) 0;
+  transition: box-shadow 0.3s;
+}
+
+.compose-btn:hover {
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+  height: 32px;
+  border-radius: var(--radius-lg);
+  margin: 4px 0;
+  cursor: pointer;
+  color: var(--text);
+  text-decoration: none;
+  gap: var(--spacing-md);
+}
+
+.nav-item:hover {
+  background: var(--hover);
+}
+
+.nav-item.active {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Dark mode */
+body.dark-mode .sidebar {
+  background: var(--dark-sidebar);
+  border-color: var(--dark-border);
+}
+
+body.dark-mode .compose-btn {
+  color: white;
+}
+
+body.dark-mode .nav-item {
+  color: white;
+}
+
+body.dark-mode .nav-item:hover {
+  background: var(--dark-hover);
+  color: white;
+}
+
+body.dark-mode .nav-item.active {
+  background: var(--dark-primary-light);
+  color: var(--dark-primary);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -256px;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .compose-btn {
+    width: 100%;
+  }
+}

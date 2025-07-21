@@ -1,0 +1,108 @@
+/* Pages */
+@import 'variables.css';
+
+/* Email Detail */
+.email-detail {
+  padding: var(--spacing-lg);
+  background: var(--card);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px var(--shadow);
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+
+.email-header {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.email-subject-header {
+  font-size: 24px;
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.email-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--spacing-sm) var(--spacing-md);
+  color: var(--secondary);
+}
+
+.email-content {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Profile */
+.profile-info {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  background: var(--card);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.profile-username {
+  font-size: 24px;
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.profile-email {
+  color: var(--secondary);
+  margin: 0;
+}
+
+/* Dark mode */
+body.dark-mode .email-detail {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
+  box-shadow: 0 1px 3px var(--dark-shadow);
+}
+
+body.dark-mode .email-header {
+  border-color: var(--dark-border);
+}
+
+body.dark-mode .email-meta {
+  color: var(--dark-secondary);
+}
+
+body.dark-mode .profile-info {
+  background: var(--dark-card);
+  color: var(--dark-text);
+}
+
+body.dark-mode .profile-avatar {
+  background: var(--dark-primary);
+  color: #232946;
+}
+
+body.dark-mode .profile-email {
+  color: var(--dark-secondary);
+}

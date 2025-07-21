@@ -1,0 +1,70 @@
+/* Responsive Design */
+@import 'variables.css';
+
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -256px;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main-content {
+    max-width: 100vw;
+    padding: var(--spacing-md);
+  }
+
+  .search-container {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .search-input-container {
+    padding: 6px var(--spacing-sm);
+  }
+
+  .search-btn {
+    padding: var(--spacing-xs) 12px;
+    font-size: 13px;
+  }
+
+  .email-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+
+  .compose-btn {
+    width: 100%;
+  }
+
+  .form-container {
+    padding: var(--spacing-md);
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  textarea {
+    padding: 10px;
+    font-size: 16px; /* Better for mobile touch targets */
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px var(--spacing-md);
+    margin: var(--spacing-sm) 0;
+  }
+}
