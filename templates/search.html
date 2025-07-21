@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block page_title %}Pencarian{% endblock %}
+
+{% block content %}
+{% if query %}
+    {% if emails %}
+        <div class="search-results-header">
+            <p>Ditemukan {{ emails|length }} email untuk "<strong>{{ query }}</strong>"</p>
+        </div>
+        <div class="email-list">
+            {% for email in emails %}
+                <a href="{{ url_for('email.email_detail', email_id=email.id) }}" class="email-item {% if not email.is_read %}unread{% endif %}">
+                    {% if not email.is_read %}
+                        <span class="unread-dot"></span>
+                    {% endif %}
+                    <div class="email-sender">
+                        {% if email.type == 'sent' %}
+                            Ke: {{ email.receiver_name or 'Unknown' }}
+                        {% else %}
+                            {{ email.sender_name }}
+                        {% endif %}
+                    </div>
+                    <div class="email-subject">{{ email.subject or '(Tanpa subjek)' }}</div>
+                    <div class="email-time">
+                        {% if email.timestamp.date() == today %}
+                            {{ email.timestamp.strftime('%H:%M') }}
+                        {% else %}
+                            {{ email.timestamp.strftime('%d/%m') }}
+                        {% endif %}
+                    </div>
+                    <div class="email-type">
+                        {% if email.type == 'sent' %}
+                            <span class="material-icons" style="font-size: 16px; color: var(--secondary);" title="Terkirim">send</span>
+                        {% else %}
+                            <span class="material-icons" style="font-size: 16px; color: var(--secondary);" title="Diterima">inbox</span>
+                        {% endif %}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-results">
+            <span class="material-icons" style="font-size: 48px; color: var(--secondary); margin-bottom: 16px;">search_off</span>
+            <p>Tidak ada email yang ditemukan untuk "<strong>{{ query }}</strong>"</p>
+            <p style="font-size: 14px; margin-top: 8px;">Coba gunakan kata kunci yang berbeda atau periksa ejaan.</p>
+        </div>
+    {% endif %}
+{% else %}
+    <div class="search-help">
+        <span class="material-icons" style="font-size: 48px; color: var(--secondary); margin-bottom: 16px;">search</span>
+        <p>Masukkan kata kunci untuk mencari email berdasarkan:</p>
+        <ul style="text-align: left; max-width: 300px; margin: 16px auto;">
+            <li>Subjek email</li>
+            <li>Isi pesan</li>
+            <li>Nama pengirim atau penerima</li>
+        </ul>
+    </div>
+{% endif %}
+{% endblock %}

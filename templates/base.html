@@ -21,6 +21,10 @@
                 Kotak Masuk
                 <span class="unread-badge" id="unreadBadge" style="display: none;"></span>
             </a>
+            <a href="{{ url_for('email.search') }}" class="nav-item {% if request.endpoint == 'search' %}active{% endif %}">
+                <span class="material-icons">search</span>
+                Pencarian
+            </a>
             <a href="{{ url_for('email.sent') }}" class="nav-item {% if request.endpoint == 'sent' %}active{% endif %}">
                 <span class="material-icons">send</span>
                 Terkirim
@@ -44,6 +48,17 @@
         </nav>
         {% endif %}
         <main class="main-content">
+            {% if 'user_id' in session %}
+            <div class="search-container">
+                <form action="{{ url_for('email.search') }}" method="GET" class="search-form">
+                    <div class="search-input-container">
+                        <span class="material-icons search-icon">search</span>
+                        <input type="text" name="q" placeholder="Cari email... (Ctrl+K)" value="{{ request.args.get('q', '') }}" class="search-input">
+                        <button type="submit" class="search-btn">Cari</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
             <div class="header">
                 <div style="display: flex; align-items: center; gap: 16px;">
                   <h2>{% block page_title %}{% endblock %}</h2>
@@ -111,6 +126,18 @@
         document.addEventListener('visibilitychange', function() {
             if (!document.hidden) {
                 updateUnreadCount();
+            }
+        });
+
+        // Search shortcut: Ctrl/Cmd + K to focus search input
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                const searchInput = document.querySelector('.search-input');
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
             }
         });
     })();

@@ -264,3 +264,48 @@ def toggle_favorite(email_id):
     cursor.close()
     db.close()
     return redirect(request.referrer or url_for('inbox'))
+
+# === SEARCH ===
+@email_bp.route('/search')
+def search():
+    if 'user_id' not in session:
+        return redirect('/login')
+    
+    query = request.args.get('q', '').strip()
+    user_id = session['user_id']
+    emails = []
+    
+    if query:
+        db = get_db()
+        cursor = db.cursor(dictionary=True)
+        
+        # Search in subject, message, and sender name
+        search_query = f"%{query}%"
+        cursor.execute("""
+            SELECT emails.id, emails.subject, emails.message, emails.timestamp, 
+                   emails.is_read, users.username AS sender_name, 'inbox' AS type
+            FROM emails
+            JOIN users ON emails.sender_id = users.id
+            WHERE emails.receiver_id = %s 
+                AND (emails.subject LIKE %s OR emails.message LIKE %s OR users.username LIKE %s)
+            
+            UNION
+            
+            SELECT emails.id, emails.subject, emails.message, emails.timestamp, 
+                   emails.is_read, users.username AS receiver_name, 'sent' AS type
+            FROM emails
+            LEFT JOIN users ON emails.receiver_id = users.id
+            WHERE emails.sender_id = %s 
+                AND emails.is_draft = 0
+                AND (emails.subject LIKE %s OR emails.message LIKE %s OR users.username LIKE %s)
+            
+            ORDER BY timestamp DESC
+        """, (user_id, search_query, search_query, search_query, 
+              user_id, search_query, search_query, search_query))
+        
+        emails = cursor.fetchall()
+        cursor.close()
+        db.close()
+    
+    today = datetime.now().date()
+    return render_template('search.html', emails=emails, query=query, today=today)

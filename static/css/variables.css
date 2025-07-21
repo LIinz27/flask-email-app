@@ -1,4 +1,4 @@
-/* Theme variables */
+/* Theme Variables */
 :root {
   /* Light theme */
   --primary: #1a73e8;
@@ -21,6 +21,7 @@
   --dark-hover: #2a2e3a;
   --dark-shadow: rgba(0, 0, 0, 0.22);
   --dark-primary-light: rgba(138, 180, 248, 0.18);
+  --dark-secondary: #9aa0a6;
   
   /* Dark gradients */
   --dark-background: linear-gradient(135deg, #232946 0%, #1a2233 100%);
