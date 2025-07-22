@@ -6,12 +6,23 @@ import mysql.connector
 import os
 
 def get_db():
-    return mysql.connector.connect(**db_config)
+    try:
+        return mysql.connector.connect(**db_config)
+    except mysql.connector.Error as e:
+        print(f"Database connection error: {e}")
+        print("Database config:", {k: v if k != 'password' else '***' for k, v in db_config.items()})
+        raise
 
 # Initialize database when app starts
 def init_db():
-    db = get_db()
-    cursor = db.cursor()
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        print("Database connection successful!")
+    except Exception as e:
+        print(f"Cannot connect to database during init: {e}")
+        print("Skipping database initialization - app will still start...")
+        return
     try:
         # Check if is_read column exists
         cursor.execute("""
@@ -74,7 +85,12 @@ app.config.update(
 )
 
 # Initialize database tables
-init_db()
+try:
+    init_db()
+    print("Database initialization completed successfully!")
+except Exception as e:
+    print(f"Warning: Database initialization failed: {e}")
+    print("App will continue to run, but database features may not work until database is configured.")
 
 # Register Blueprints
 from routes.auth import auth_bp
@@ -106,6 +122,11 @@ def validate_session():
 @app.route('/')
 def index():
     return redirect('/login')
+
+# Health check route for Railway
+@app.route('/health')
+def health_check():
+    return {'status': 'healthy', 'message': 'Flask app is running'}, 200
 
 # === ERROR HANDLERS ===
 @app.errorhandler(404)
