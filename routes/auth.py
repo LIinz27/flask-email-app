@@ -19,7 +19,7 @@ def register():
         db = get_db()
         cursor = db.cursor()
         try:
-            cursor.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)",
+            cursor.execute("INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)",
                            (username, email, hashed_pw))
             db.commit()
             flash('Registrasi berhasil, silakan login.', 'success')
@@ -44,7 +44,7 @@ def login():
         cursor.close()
         db.close()
 
-        if user and bcrypt.checkpw(password, user['password'].encode('utf-8')):
+        if user and bcrypt.checkpw(password, user['password_hash'].encode('utf-8')):
             # Create session
             session.permanent = True  # Make session permanent
             session['user_id'] = user['id']
