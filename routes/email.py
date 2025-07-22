@@ -17,7 +17,7 @@ def delete_draft(draft_id):
     user_id = session['user_id']
     db = get_db()
     cursor = db.cursor()
-    cursor.execute('DELETE FROM emails WHERE id = %s AND sender_id = %s AND is_draft = 1', (draft_id, user_id))
+    cursor.execute('DELETE FROM emails WHERE id = %s AND sender = %s AND is_draft = 1', (draft_id, user_id))
     db.commit()
     cursor.close()
     db.close()
@@ -33,10 +33,10 @@ def drafts():
     db = get_db()
     cursor = db.cursor(dictionary=True)
     cursor.execute('''
-        SELECT emails.*, users.username AS receiver_name
+        SELECT emails.*, emails.recipient AS receiver_name
         FROM emails
-        LEFT JOIN users ON emails.receiver_id = users.id
-        WHERE emails.sender_id = %s AND emails.is_draft = 1
+        LEFT JOIN users ON emails.recipient = users.id
+        WHERE emails.sender = %s AND emails.is_draft = 1
         ORDER BY emails.timestamp DESC
     ''', (user_id,))
     drafts = cursor.fetchall()
@@ -56,11 +56,11 @@ def inbox():
     db = get_db()
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
-        SELECT emails.id, emails.subject, emails.message, emails.timestamp, 
-               emails.is_read, users.username AS sender_name
+        SELECT emails.id, emails.subject, emails.body, emails.timestamp, 
+               emails.is_read, emails.sender AS sender_name
         FROM emails
-        JOIN users ON emails.sender_id = users.id
-        WHERE emails.receiver_id = %s
+        JOIN users ON emails.sender = users.id
+        WHERE emails.recipient = %s
         ORDER BY emails.timestamp DESC
     """, (user_id,))
     emails = cursor.fetchall()
@@ -79,50 +79,50 @@ def compose(draft_id=None):
     cursor = db.cursor(dictionary=True)
     draft = None
     if draft_id:
-        cursor.execute("SELECT * FROM emails WHERE id = %s AND sender_id = %s AND is_draft = 1", (draft_id, session['user_id']))
+        cursor.execute("SELECT * FROM emails WHERE id = %s AND sender = %s AND is_draft = 1", (draft_id, session['user_id']))
         draft = cursor.fetchone()
     if request.method == 'POST':
         receiver_username = request.form['receiver']
         subject = request.form['subject']
         message = request.form['message']
-        sender_id = session['user_id']
+        sender = session['user_id']
         action = request.form.get('action')
-        receiver_id = None
+        recipient = None
         if receiver_username:
             cursor.execute("SELECT id FROM users WHERE username = %s", (receiver_username,))
             receiver = cursor.fetchone()
             if receiver:
-                receiver_id = receiver['id']
+                recipient = receiver['id']
         
         # Handle auto-save draft
         if action == 'auto_draft':
             # Jika ada draft_id, update existing draft
             if draft:
                 cursor.execute("""
-                    UPDATE emails SET receiver_id=%s, subject=%s, message=%s, is_draft=1 WHERE id=%s AND sender_id=%s
-                """, (receiver_id, subject, message, draft_id, sender_id))
+                    UPDATE emails SET recipient=%s, subject=%s, message=%s, is_draft=1 WHERE id=%s AND sender=%s
+                """, (recipient, subject, message, draft_id, sender))
                 db.commit()
             else:
                 # Cek apakah ada auto-draft existing untuk user ini (draft yang tidak memiliki judul khusus)
                 cursor.execute("""
-                    SELECT id FROM emails WHERE sender_id = %s AND is_draft = 1 
+                    SELECT id FROM emails WHERE sender = %s AND is_draft = 1 
                     AND (subject = '' OR subject IS NULL OR subject LIKE 'Auto-draft%')
                     ORDER BY timestamp DESC LIMIT 1
-                """, (sender_id,))
+                """, (sender,))
                 existing_auto_draft = cursor.fetchone()
                 
                 if existing_auto_draft:
                     # Update existing auto-draft
                     cursor.execute("""
-                        UPDATE emails SET receiver_id=%s, subject=%s, message=%s WHERE id=%s
-                    """, (receiver_id, subject, message, existing_auto_draft['id']))
+                        UPDATE emails SET recipient=%s, subject=%s, message=%s WHERE id=%s
+                    """, (recipient, subject, message, existing_auto_draft['id']))
                     db.commit()
                 else:
                     # Create new auto-draft
                     cursor.execute("""
-                        INSERT INTO emails (sender_id, receiver_id, subject, message, is_draft)
+                        INSERT INTO emails (sender, recipient, subject, body, is_draft)
                         VALUES (%s, %s, %s, %s, 1)
-                    """, (sender_id, receiver_id, subject, message))
+                    """, (sender, recipient, subject, message))
                     db.commit()
             
             cursor.close()
@@ -132,35 +132,35 @@ def compose(draft_id=None):
         elif action == 'draft':
             if draft:  # update existing draft
                 cursor.execute("""
-                    UPDATE emails SET receiver_id=%s, subject=%s, message=%s, is_draft=1 WHERE id=%s AND sender_id=%s
-                """, (receiver_id, subject, message, draft_id, sender_id))
+                    UPDATE emails SET recipient=%s, subject=%s, message=%s, is_draft=1 WHERE id=%s AND sender=%s
+                """, (recipient, subject, message, draft_id, sender))
                 db.commit()
                 flash('Draft berhasil diperbarui.', 'success')
                 return redirect('/drafts')
             else:  # create new draft
                 cursor.execute("""
-                    INSERT INTO emails (sender_id, receiver_id, subject, message, is_draft)
+                    INSERT INTO emails (sender, recipient, subject, body, is_draft)
                     VALUES (%s, %s, %s, %s, 1)
-                """, (sender_id, receiver_id, subject, message))
+                """, (sender, recipient, subject, message))
                 db.commit()
                 flash('Draft berhasil disimpan.', 'success')
                 return redirect('/drafts')
         elif action == 'send':
-            if not receiver_id:
+            if not recipient:
                 flash('Username penerima tidak ditemukan.', 'danger')
                 return render_template('compose.html', draft=draft)
             if draft:  # update draft and send
                 cursor.execute("""
-                    UPDATE emails SET receiver_id=%s, subject=%s, message=%s, is_draft=0 WHERE id=%s AND sender_id=%s
-                """, (receiver_id, subject, message, draft_id, sender_id))
+                    UPDATE emails SET recipient=%s, subject=%s, message=%s, is_draft=0 WHERE id=%s AND sender=%s
+                """, (recipient, subject, message, draft_id, sender))
                 db.commit()
                 flash('Draft berhasil dikirim!', 'success')
                 return redirect('/sent')
             else:  # new send
                 cursor.execute("""
-                    INSERT INTO emails (sender_id, receiver_id, subject, message, is_draft)
+                    INSERT INTO emails (sender, recipient, subject, body, is_draft)
                     VALUES (%s, %s, %s, %s, 0)
-                """, (sender_id, receiver_id, subject, message))
+                """, (sender, recipient, subject, message))
                 db.commit()
                 flash('Email berhasil dikirim!', 'success')
                 return redirect('/sent')
@@ -177,11 +177,11 @@ def sent():
     db = get_db()
     cursor = db.cursor(dictionary=True)
     cursor.execute('''
-        SELECT emails.id, emails.subject, emails.message, emails.timestamp,
-               users.username AS receiver_name
+        SELECT emails.id, emails.subject, emails.body, emails.timestamp,
+               emails.recipient AS receiver_name
         FROM emails
-        JOIN users ON emails.receiver_id = users.id
-        WHERE emails.sender_id = %s
+        JOIN users ON emails.recipient = users.id
+        WHERE emails.sender = %s
         ORDER BY emails.timestamp DESC
     ''', (user_id,))
     emails = cursor.fetchall()
@@ -199,16 +199,16 @@ def email_detail(email_id):
     cursor = db.cursor(dictionary=True)
     cursor.execute('''
         SELECT emails.*, 
-               sender.username AS sender_name, 
-               receiver.username AS receiver_name
+               emails.sender AS sender_name, 
+               emails.recipient AS receiver_name
         FROM emails
-        JOIN users sender ON emails.sender_id = sender.id
-        JOIN users receiver ON emails.receiver_id = receiver.id
-        WHERE emails.id = %s AND (emails.sender_id = %s OR emails.receiver_id = %s)
+        JOIN users sender ON emails.sender = sender.id
+        JOIN users receiver ON emails.recipient = receiver.id
+        WHERE emails.id = %s AND (emails.sender = %s OR emails.recipient = %s)
     ''', (email_id, user_id, user_id))
     email = cursor.fetchone()
     # Mark as read if the current user is the receiver
-    if email and email['receiver_id'] == user_id and not email['is_read']:
+    if email and email['recipient'] == user_id and not email['is_read']:
         cursor.execute('UPDATE emails SET is_read = 1 WHERE id = %s', (email_id,))
         db.commit()
         email['is_read'] = True
@@ -227,7 +227,7 @@ def mark_as_read(email_id):
     user_id = session['user_id']
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    cursor.execute('UPDATE emails SET is_read = 1 WHERE id = %s AND receiver_id = %s', (email_id, user_id))
+    cursor.execute('UPDATE emails SET is_read = 1 WHERE id = %s AND recipient = %s', (email_id, user_id))
     db.commit()
     cursor.close()
     db.close()
@@ -242,7 +242,7 @@ def unread_count():
     user_id = session['user_id']
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    cursor.execute('SELECT COUNT(*) as count FROM emails WHERE receiver_id = %s AND is_read = 0', (user_id,))
+    cursor.execute('SELECT COUNT(*) as count FROM emails WHERE recipient = %s AND is_read = 0', (user_id,))
     result = cursor.fetchone()
     cursor.close()
     db.close()
@@ -259,12 +259,12 @@ def favorites():
     cursor = db.cursor(dictionary=True)
     cursor.execute('''
         SELECT emails.*, 
-               sender.username AS sender_name,
-               receiver.username AS receiver_name
+               emails.sender AS sender_name,
+               emails.recipient AS receiver_name
         FROM emails
-        JOIN users sender ON emails.sender_id = sender.id
-        JOIN users receiver ON emails.receiver_id = receiver.id
-        WHERE (emails.receiver_id = %s OR emails.sender_id = %s)
+        JOIN users sender ON emails.sender = sender.id
+        JOIN users receiver ON emails.recipient = receiver.id
+        WHERE (emails.recipient = %s OR emails.sender = %s)
         AND emails.is_favorite = 1
         ORDER BY emails.timestamp DESC
     ''', (user_id, user_id))
@@ -284,7 +284,7 @@ def toggle_favorite(email_id):
     cursor.execute('''
         SELECT is_favorite
         FROM emails
-        WHERE id = %s AND (sender_id = %s OR receiver_id = %s)
+        WHERE id = %s AND (sender = %s OR recipient = %s)
     ''', (email_id, user_id, user_id))
     email = cursor.fetchone()
     if email:
@@ -320,22 +320,22 @@ def search():
         # Search in subject, message, and sender name
         search_query = f"%{query}%"
         cursor.execute("""
-            SELECT emails.id, emails.subject, emails.message, emails.timestamp, 
-                   emails.is_read, users.username AS sender_name, 'inbox' AS type
+            SELECT emails.id, emails.subject, emails.body, emails.timestamp, 
+                   emails.is_read, emails.sender AS sender_name, 'inbox' AS type
             FROM emails
-            JOIN users ON emails.sender_id = users.id
-            WHERE emails.receiver_id = %s 
-                AND (emails.subject LIKE %s OR emails.message LIKE %s OR users.username LIKE %s)
+            JOIN users ON emails.sender = users.id
+            WHERE emails.recipient = %s 
+                AND (emails.subject LIKE %s OR emails.body LIKE %s OR users.username LIKE %s)
             
             UNION
             
-            SELECT emails.id, emails.subject, emails.message, emails.timestamp, 
-                   emails.is_read, users.username AS receiver_name, 'sent' AS type
+            SELECT emails.id, emails.subject, emails.body, emails.timestamp, 
+                   emails.is_read, emails.recipient AS receiver_name, 'sent' AS type
             FROM emails
-            LEFT JOIN users ON emails.receiver_id = users.id
-            WHERE emails.sender_id = %s 
+            LEFT JOIN users ON emails.recipient = users.id
+            WHERE emails.sender = %s 
                 AND emails.is_draft = 0
-                AND (emails.subject LIKE %s OR emails.message LIKE %s OR users.username LIKE %s)
+                AND (emails.subject LIKE %s OR emails.body LIKE %s OR users.username LIKE %s)
             
             ORDER BY timestamp DESC
         """, (user_id, search_query, search_query, search_query, 
