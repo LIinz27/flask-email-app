@@ -1,0 +1,172 @@
+/* Simple Dark Mode Implementation */
+
+/* Theme Toggle Styles */
+.theme-toggle {
+    position: relative;
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.theme-switch {
+    position: relative;
+    width: 50px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-switch::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #4338CA, #7C3AED);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .theme-switch::before {
+    transform: translateX(24px);
+    background: linear-gradient(135deg, #6366F1, #8B5CF6);
+}
+
+.theme-icon {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+}
+
+.theme-icon.active {
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* Dark Mode Styles */
+[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+[data-theme="dark"] body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+    color: #f9fafb !important;
+}
+
+/* Glass Effects for Dark Mode */
+[data-theme="dark"] .glass-card,
+[data-theme="dark"] .glass-hover {
+    background: rgba(30, 30, 30, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px);
+}
+
+[data-theme="dark"] .sidebar {
+    background: linear-gradient(135deg, rgba(40,40,40,0.8) 0%, rgba(20,20,20,0.6) 100%) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .nav-item {
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .nav-item:hover,
+[data-theme="dark"] .nav-item.active {
+    background: rgba(60, 60, 60, 0.6) !important;
+    color: #f9fafb !important;
+}
+
+[data-theme="dark"] .compose-btn {
+    background: linear-gradient(135deg, #6366F1, #8B5CF6) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+    background: rgba(30, 30, 30, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #f9fafb !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: #9ca3af !important;
+}
+
+[data-theme="dark"] .btn,
+[data-theme="dark"] .btn-liquid {
+    background: rgba(60, 60, 60, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #f9fafb !important;
+}
+
+[data-theme="dark"] .search-container {
+    background: rgba(20, 20, 20, 0.5) !important;
+}
+
+[data-theme="dark"] .header {
+    background: rgba(30, 30, 30, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .email-item {
+    background: rgba(40, 40, 40, 0.6) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #f9fafb !important;
+}
+
+[data-theme="dark"] .email-item:hover {
+    background: rgba(50, 50, 50, 0.7) !important;
+}
+
+[data-theme="dark"] .flash {
+    background: rgba(40, 40, 40, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #f9fafb !important;
+}
+
+/* Dark Mode Text Colors */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: #f9fafb !important;
+}
+
+[data-theme="dark"] p,
+[data-theme="dark"] span,
+[data-theme="dark"] div {
+    color: #e5e7eb !important;
+}
+
+[data-theme="dark"] a {
+    color: #6366F1 !important;
+}
+
+/* Dark Mode Floating Elements */
+[data-theme="dark"] .floating-element {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)) !important;
+}
+
+/* Smooth transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}

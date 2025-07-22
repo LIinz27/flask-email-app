@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style-modular.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/liquid-glass.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode-simple.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     {% block head %}{% endblock %}
 </head>
-<body>
+<body data-theme="light">
     <!-- Floating Background Elements -->
     <div class="floating-elements">
         <div class="floating-element"></div>
@@ -66,7 +67,7 @@
                 <form action="{{ url_for('email.search') }}" method="GET" class="search-form">
                     <div class="search-input-container glass-hover">
                         <span class="material-icons search-icon">search</span>
-                        <input type="text" name="q" placeholder="Cari email dengan efek liquid glass... (Ctrl+K)" value="{{ request.args.get('q', '') }}" class="search-input input-liquid">
+                        <input type="text" name="q" placeholder="Cari email (Ctrl+K)" value="{{ request.args.get('q', '') }}" class="search-input input-liquid">
                         <button type="submit" class="search-btn btn-liquid">
                             <span class="material-icons">search</span>
                             Cari
@@ -78,12 +79,20 @@
             <div class="header glass-card">
                 <div style="display: flex; align-items: center; gap: 20px; width: 100%;">
                   <h1>{% block page_title %}{% endblock %}</h1>
-                  {% if session.get('username') %}
-                    <span style="font-size: 16px; color: var(--primary); font-weight: 600; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; backdrop-filter: blur(8px); margin-left: auto;">
-                        <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">person</span>
-                        {{ session['username']}}
-                    </span>
-                  {% endif %}
+                  <div style="display: flex; align-items: center; gap: 16px; margin-left: auto;">
+                    <!-- Dark Mode Toggle -->
+                    <div class="theme-toggle tooltip-liquid" data-tooltip="Toggle Dark Mode (Ctrl+Shift+D)">
+                        <span class="material-icons theme-icon" id="lightIcon">light_mode</span>
+                        <div class="theme-switch" onclick="toggleTheme()" id="themeSwitch"></div>
+                        <span class="material-icons theme-icon" id="darkIcon">dark_mode</span>
+                    </div>
+                    {% if session.get('username') %}
+                      <span style="font-size: 16px; color: var(--primary); font-weight: 600; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; backdrop-filter: blur(8px);">
+                          <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">person</span>
+                          {{ session['username']}}
+                      </span>
+                    {% endif %}
+                  </div>
                 </div>
             </div>
             {% with messages = get_flashed_messages(with_categories=true) %}
@@ -223,10 +232,14 @@
 
     // Initialize liquid glass effects when DOM is loaded
     (function() {
-        console.log('Liquid Glass UI initialized'); // Debug log
-        
         // Initialize liquid glass effects
         initLiquidGlassEffects();
+        
+        // Create floating particles
+        createFloatingParticles();
+        
+        // Create glass orbs
+        createGlassOrbs();
         
         // Update unread count immediately and every 30 seconds
         if (typeof updateUnreadCount === 'function') {
@@ -249,21 +262,6 @@
                 document.body.style.opacity = '1';
             }, 100);
         });
-        
-        // Initialize liquid glass effects
-        initLiquidGlassEffects();
-        
-        // Create floating particles
-        createFloatingParticles();
-        
-        // Create glass orbs
-        createGlassOrbs();
-        
-        // Update unread count immediately and every 30 seconds
-        if (typeof updateUnreadCount === 'function') {
-            updateUnreadCount();
-            setInterval(updateUnreadCount, 30000);
-        }
     })();
 
     // Enhanced Floating Particles
@@ -336,6 +334,56 @@
             document.body.appendChild(orb);
         }
     }
+    </script>
+
+    <!-- Theme Management Script -->
+    <script>
+        // Simple Theme Toggle Implementation
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Apply new theme
+            body.setAttribute('data-theme', newTheme);
+            
+            // Save to localStorage
+            localStorage.setItem('email-app-theme', newTheme);
+            
+            // Update icons
+            updateThemeIcons(newTheme);
+        }
+        
+        function updateThemeIcons(theme) {
+            const lightIcon = document.getElementById('lightIcon');
+            const darkIcon = document.getElementById('darkIcon');
+            
+            if (lightIcon && darkIcon) {
+                if (theme === 'dark') {
+                    lightIcon.classList.remove('active');
+                    darkIcon.classList.add('active');
+                } else {
+                    lightIcon.classList.add('active');
+                    darkIcon.classList.remove('active');
+                }
+            }
+        }
+        
+        function initializeTheme() {
+            // Get saved theme or default to light
+            const savedTheme = localStorage.getItem('email-app-theme') || 'light';
+            
+            // Apply theme
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            // Update icons
+            updateThemeIcons(savedTheme);
+        }
+        
+        // Initialize theme when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTheme();
+        });
     </script>
 </body>
 </html>

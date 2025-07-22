@@ -9,45 +9,45 @@
   --warning: #F59E0B;
   --danger: #EF4444;
   
-  /* Text Colors - Maximum Readability */
+  /* Light Mode Text Colors - Maximum Readability */
   --text: #111827;
   --text-secondary: #374151;
   --text-light: #6B7280;
   --text-muted: #9CA3AF;
   --text-white: #FFFFFF;
   
-  /* Borders & Interactive States */
+  /* Light Mode Borders & Interactive States */
   --border: rgba(31, 41, 55, 0.08);
   --border-light: rgba(31, 41, 55, 0.05);
   --hover: rgba(67, 56, 202, 0.04);
   --focus: rgba(67, 56, 202, 0.1);
   
-  /* Glass Effects - More Prominent */
+  /* Light Mode Glass Effects - More Prominent */
   --glass-bg: rgba(255, 255, 255, 0.25);
   --glass-border: rgba(255, 255, 255, 0.4);
   --glass-shadow: 0 8px 32px rgba(31, 41, 55, 0.15);
   --glass-blur: blur(20px);
   
-  /* Enhanced Glass Effects for Stronger Visibility */
+  /* Light Mode Enhanced Glass Effects for Stronger Visibility */
   --glass-bg-strong: rgba(255, 255, 255, 0.4);
   --glass-bg-subtle: rgba(255, 255, 255, 0.15);
   --glass-border-strong: rgba(255, 255, 255, 0.6);
   --glass-border-subtle: rgba(255, 255, 255, 0.2);
   
-  /* Liquid Gradients - More Vibrant & Glass-like */
+  /* Light Mode Liquid Gradients - More Vibrant & Glass-like */
   --background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   --sidebar: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
   --card: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 100%);
   
-  /* Enhanced Glass Gradients */
+  /* Light Mode Enhanced Glass Gradients */
   --glass-gradient: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
   --glass-gradient-hover: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 100%);
   
-  /* Shimmer Effect - More Prominent */
+  /* Light Mode Shimmer Effect - More Prominent */
   --shimmer: linear-gradient(45deg, transparent 20%, rgba(255,255,255,0.8) 50%, transparent 80%);
   --shimmer-strong: linear-gradient(45deg, transparent 10%, rgba(255,255,255,0.9) 50%, transparent 90%);
   
-  /* Shadows - More Dramatic */
+  /* Light Mode Shadows - More Dramatic */
   --shadow-xs: 0 2px 8px rgba(31, 41, 55, 0.1);
   --shadow-sm: 0 4px 12px rgba(31, 41, 55, 0.15);
   --shadow: 0 8px 25px rgba(31, 41, 55, 0.2);
@@ -73,4 +73,62 @@
   --radius-lg: 24px;
   --radius-xl: 32px;
   --radius-organic: 16px 24px 20px 18px;
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"] {
+  /* Dark Mode Core Colors */
+  --primary: #6366F1;
+  --primary-light: rgba(99, 102, 241, 0.15);
+  --secondary: #8B5CF6;
+  --accent: #10B981;
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  
+  /* Dark Mode Text Colors */
+  --text: #F9FAFB;
+  --text-secondary: #E5E7EB;
+  --text-light: #D1D5DB;
+  --text-muted: #9CA3AF;
+  --text-white: #FFFFFF;
+  
+  /* Dark Mode Borders & Interactive States */
+  --border: rgba(255, 255, 255, 0.1);
+  --border-light: rgba(255, 255, 255, 0.05);
+  --hover: rgba(99, 102, 241, 0.1);
+  --focus: rgba(99, 102, 241, 0.2);
+  
+  /* Dark Mode Glass Effects */
+  --glass-bg: rgba(30, 30, 30, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-blur: blur(20px);
+  
+  /* Dark Mode Enhanced Glass Effects */
+  --glass-bg-strong: rgba(40, 40, 40, 0.8);
+  --glass-bg-subtle: rgba(20, 20, 20, 0.4);
+  --glass-border-strong: rgba(255, 255, 255, 0.25);
+  --glass-border-subtle: rgba(255, 255, 255, 0.1);
+  
+  /* Dark Mode Liquid Gradients */
+  --background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --sidebar: linear-gradient(135deg, rgba(40,40,40,0.8) 0%, rgba(20,20,20,0.6) 100%);
+  --card: linear-gradient(135deg, rgba(50,50,50,0.7) 0%, rgba(30,30,30,0.5) 100%);
+  
+  /* Dark Mode Enhanced Glass Gradients */
+  --glass-gradient: linear-gradient(135deg, rgba(60,60,60,0.6) 0%, rgba(30,30,30,0.3) 100%);
+  --glass-gradient-hover: linear-gradient(135deg, rgba(80,80,80,0.7) 0%, rgba(40,40,40,0.4) 100%);
+  
+  /* Dark Mode Shimmer Effect */
+  --shimmer: linear-gradient(45deg, transparent 20%, rgba(255,255,255,0.2) 50%, transparent 80%);
+  --shimmer-strong: linear-gradient(45deg, transparent 10%, rgba(255,255,255,0.3) 50%, transparent 90%);
+  
+  /* Dark Mode Shadows */
+  --shadow-xs: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.6);
+  --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }

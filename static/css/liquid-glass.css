@@ -132,6 +132,16 @@
   font-weight: 600;
   overflow: hidden;
   transition: var(--transition-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+}
+
+.btn-liquid .material-icons {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .btn-liquid::before {
@@ -302,20 +312,21 @@
   animation: shimmer 2s ease-in-out infinite;
 }
 
-/* Dark Mode Adjustments */
-body.dark-mode .floating-element {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.1), rgba(159, 122, 234, 0.1));
+/* Dark Mode Adjustments - Updated to use data-theme */
+[data-theme="dark"] .floating-element {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
 }
 
-body.dark-mode .glass-card {
-  background: var(--dark-glass-bg);
-  border-color: var(--dark-glass-border);
-  box-shadow: var(--dark-shadow);
+[data-theme="dark"] .glass-card {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  box-shadow: var(--shadow-glass);
 }
 
-body.dark-mode .input-liquid {
-  background: var(--dark-glass-bg);
-  border-color: var(--dark-glass-border);
+[data-theme="dark"] .input-liquid {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  color: var(--text);
 }
 
 body.dark-mode .input-liquid:focus {

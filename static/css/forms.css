@@ -284,6 +284,16 @@ body.dark-mode .tox-edit-area {
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+}
+
+.search-btn .material-icons {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .search-btn::before {
