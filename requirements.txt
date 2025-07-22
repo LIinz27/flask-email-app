@@ -1,7 +1,8 @@
-Flask
-Flask-WTF
-Flask-Bcrypt
-Flask-Login
-Flask-Migrate
-mysql-connector-python
-bcrypt
+Flask==2.3.3
+Flask-WTF==1.1.1
+Flask-Bcrypt==1.0.1
+Flask-Login==0.6.3
+Flask-Migrate==4.0.5
+mysql-connector-python==8.1.0
+bcrypt==4.0.1
+gunicorn==21.2.0

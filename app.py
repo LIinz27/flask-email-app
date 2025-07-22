@@ -63,11 +63,11 @@ def init_db():
 
 app = Flask(__name__)
 
-# Session configuration - this is critical
-app.secret_key = 'email-app-secret-key-2025-very-long-and-secure'
+# Session configuration - production ready
+app.secret_key = os.environ.get('SECRET_KEY', 'email-app-secret-key-2025-very-long-and-secure')
 app.config.update(
     SESSION_COOKIE_NAME='email_session',
-    SESSION_COOKIE_SECURE=False,  # False for HTTP, True for HTTPS
+    SESSION_COOKIE_SECURE=os.environ.get('FLASK_ENV') == 'production',  # True for HTTPS in production
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
     PERMANENT_SESSION_LIFETIME=3600  # 1 hour
@@ -117,4 +117,6 @@ def internal_error(error):
     return render_template('500.html'), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') == 'development'
+    app.run(host='0.0.0.0', port=port, debug=debug)
