@@ -1,102 +1,274 @@
-/* Sidebar */
+/* Enhanced Liquid Glass Sidebar */
 @import 'variables.css';
 
 .sidebar {
-  width: 256px;
-  background: var(--sidebar);
-  padding: var(--spacing-md);
-  border-right: 1px solid var(--border);
-  transition: all 0.3s;
+  width: 280px;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  padding: var(--spacing-lg);
+  border-right: 2px solid var(--glass-border-strong);
+  box-shadow: var(--shadow-glass);
+  transition: var(--transition-smooth);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 24px 24px 0;
 }
 
+/* Enhanced glass effect overlay with multiple layers */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--glass-gradient);
+  z-index: -2;
+  border-radius: 0 24px 24px 0;
+}
+
+/* Additional glass layer for depth */
+.sidebar::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: var(--shimmer-strong);
+  transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  transition: var(--transition-smooth);
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.sidebar:hover {
+  background: var(--glass-bg-strong);
+  border-right-color: rgba(255, 255, 255, 0.8);
+  transform: translateX(2px);
+}
+
+.sidebar:hover::after {
+  transform: translateX(100%) translateY(100%) rotate(45deg);
+  opacity: 0.6;
+}
+
+/* Enhanced Compose Button with Premium Glass Effect */
 .compose-btn {
-  width: 150px;
-  height: 48px;
-  border-radius: var(--radius-lg);
-  background: var(--primary);
+  width: 100%;
+  height: 56px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   color: white;
-  border: none;
-  font-weight: 500;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  margin: var(--spacing-sm) 0 var(--spacing-md) 0;
-  transition: box-shadow 0.3s;
+  gap: var(--spacing-md);
+  margin: 0 0 var(--spacing-lg) 0;
+  transition: var(--transition-bounce);
   text-decoration: none;
+  box-shadow: var(--shadow-glass);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* Enhanced shimmer effect for compose button */
+.compose-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--shimmer-strong);
+  transition: var(--transition-smooth);
+  z-index: 1;
 }
 
 .compose-btn:hover {
-  box-shadow: 0 1px 3px var(--shadow);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(67, 56, 202, 0.4), var(--shadow-glass);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.compose-btn:hover::before {
+  left: 100%;
+}
+
+.compose-btn:active {
+  transform: translateY(-2px) scale(1.02);
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  padding: 0 var(--spacing-md);
-  height: 32px;
-  border-radius: var(--radius-lg);
-  margin: 4px 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  height: 48px;
+  border-radius: 16px;
+  margin: var(--spacing-xs) 0;
   cursor: pointer;
   color: var(--text);
   text-decoration: none;
   gap: var(--spacing-md);
+  transition: var(--transition-smooth);
+  position: relative;
+  z-index: 2;
+  background: var(--glass-bg-subtle);
+  border: 1px solid var(--glass-border-subtle);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  overflow: hidden;
+}
+
+/* Glass shimmer effect for nav items */
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--shimmer);
+  transition: var(--transition-smooth);
+  z-index: 1;
+}
+
+.nav-item:hover::before {
+  left: 100%;
 }
 
 .nav-item:hover {
-  background: var(--hover);
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transform: translateX(10px) scale(1.05);
+  box-shadow: var(--shadow-glass);
+  border-color: var(--glass-border-strong);
+  color: var(--primary);
 }
 
 .nav-item.active {
-  background: var(--primary-light);
+  background: var(--glass-gradient-hover);
   color: var(--primary);
-  font-weight: 500;
+  font-weight: 600;
+  transform: translateX(12px) scale(1.02);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.nav-item .material-icons {
+  transition: var(--transition-smooth);
+}
+
+.nav-item:hover .material-icons {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.nav-item.active .material-icons {
+  transform: scale(1.2);
+}
+
+/* Unread badge with glow effect */
+.unread-badge {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-left: auto;
+  min-width: 20px;
+  text-align: center;
+  box-shadow: 0 0 12px rgba(240, 147, 251, 0.5);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(240, 147, 251, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(240, 147, 251, 0.8); }
 }
 
 /* Dark mode */
 body.dark-mode .sidebar {
+  background: var(--dark-glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-color: var(--dark-glass-border);
+}
+
+body.dark-mode .sidebar::before {
   background: var(--dark-sidebar);
-  border-color: var(--dark-border);
 }
 
 body.dark-mode .compose-btn {
+  background: linear-gradient(135deg, var(--dark-primary) 0%, var(--dark-secondary) 100%);
   color: white;
 }
 
 body.dark-mode .nav-item {
-  color: white;
+  color: var(--dark-text);
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 body.dark-mode .nav-item:hover {
-  background: var(--dark-hover);
-  color: white;
+  background: var(--dark-glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--dark-text);
+  border-color: var(--dark-glass-border);
 }
 
 body.dark-mode .nav-item.active {
   background: var(--dark-primary-light);
   color: var(--dark-primary);
+  border-color: var(--dark-primary);
 }
 
-/* Responsive */
+/* Responsive - Mobile liquid glass */
 @media screen and (max-width: 768px) {
   .sidebar {
     position: fixed;
-    left: -256px;
+    left: -300px;
     top: 0;
     height: 100vh;
     z-index: 1000;
-    transition: left 0.3s ease;
+    transition: var(--transition-smooth);
+    width: 300px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
   }
 
   .sidebar.active {
     left: 0;
+    box-shadow: var(--shadow-hover);
+  }
+
+  .sidebar::before {
+    border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
   }
 
   .compose-btn {
     width: 100%;
+    font-size: 18px;
+    height: 60px;
+  }
+  
+  .nav-item {
+    height: 52px;
+    font-size: 16px;
   }
 }

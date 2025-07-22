@@ -1,6 +1,6 @@
-/* Modern Email Client CSS - Modular Architecture */
+/* Liquid Glass Email Client CSS - Modular Architecture */
 
-/* Import all modules */
+/* Import all modules for Liquid Glass UI */
 @import 'css/variables.css';
 @import 'css/base.css';
 @import 'css/sidebar.css';
@@ -9,3 +9,56 @@
 @import 'css/forms.css';
 @import 'css/pages.css';
 @import 'css/responsive.css';
+@import 'css/liquid-glass.css';
+
+/* Global Liquid Glass Enhancements */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Enhanced scrollbar with liquid glass effect */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--glass-bg);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 4px;
+  transition: var(--transition-smooth);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+}
+
+/* Dark mode scrollbar */
+body.dark-mode ::-webkit-scrollbar-track {
+  background: var(--dark-glass-bg);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--dark-primary), var(--dark-secondary));
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--dark-secondary), var(--dark-primary));
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+}

@@ -1,53 +1,106 @@
-/* Pages */
+/* Liquid Glass Pages */
 @import 'variables.css';
 
-/* Email Detail */
+/* Email Detail with Glass Effect */
 .email-detail {
-  padding: var(--spacing-lg);
-  background: var(--card);
-  border-radius: var(--radius-md);
-  box-shadow: 0 1px 3px var(--shadow);
-  border: 1px solid var(--border);
-  transition: all 0.3s;
+  padding: var(--spacing-xl);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--glass-border);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  margin: var(--spacing-lg) 0;
+}
+
+.email-detail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.email-detail:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .email-header {
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--glass-border);
+  position: relative;
+}
+
+.email-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: 1px;
 }
 
 .email-subject-header {
-  font-size: 24px;
-  margin: 0 0 var(--spacing-md) 0;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 var(--spacing-lg) 0;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
 }
 
 .email-meta {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: var(--spacing-sm) var(--spacing-md);
-  color: var(--secondary);
+  gap: var(--spacing-md) var(--spacing-lg);
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.email-meta strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 .email-content {
-  line-height: 1.6;
+  line-height: 1.8;
   white-space: pre-wrap;
-}
-
-/* Rich text content styling */
-.email-content h1, .email-content h2, .email-content h3,
-.email-content h4, .email-content h5, .email-content h6 {
-  margin: 16px 0 8px 0;
+  font-size: 16px;
   color: var(--text);
 }
 
+/* Rich text content styling with glass effects */
+.email-content h1, .email-content h2, .email-content h3,
+.email-content h4, .email-content h5, .email-content h6 {
+  margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+  color: var(--text);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .email-content p {
-  margin: 8px 0;
+  margin: var(--spacing-md) 0;
 }
 
 .email-content ul, .email-content ol {
-  margin: 8px 0;
-  padding-left: 24px;
+  margin: var(--spacing-md) 0;
+  padding-left: var(--spacing-xl);
 }
 
 .email-content li {

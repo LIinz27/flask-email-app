@@ -1,48 +1,133 @@
-/* Layout */
+/* Liquid Glass Layout */
 @import 'variables.css';
 
 .main-content {
   flex: 1;
-  padding: var(--spacing-lg);
-  background: transparent;
-  max-width: calc(100vw - 256px);
+  padding: var(--spacing-xl);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  max-width: calc(100vw - 280px);
   overflow-x: hidden;
+  position: relative;
+  margin: var(--spacing-lg);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Email List */
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    var(--primary), 
+    var(--secondary), 
+    var(--accent),
+    var(--primary));
+  box-shadow: 0 0 15px rgba(102, 126, 234, 0.6);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced Liquid Glass Email List */
 .email-list {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  background: var(--card);
-  box-shadow: 0 1px 3px var(--shadow);
-  transition: all 0.3s;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: var(--transition-smooth);
   max-width: 100%;
   margin: 0 auto;
+  position: relative;
+}
+
+.email-list::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
 }
 
 .email-item {
   display: flex;
   align-items: center;
-  padding: 12px var(--spacing-md);
-  border-bottom: 1px solid var(--border);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--transition-smooth);
   text-decoration: none;
   color: var(--text);
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+}
+
+.email-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  transition: var(--transition-smooth);
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
 }
 
 .email-item:hover {
-  background: var(--hover);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.email-item:hover::before {
+  width: 4px;
 }
 
 .email-item:last-child {

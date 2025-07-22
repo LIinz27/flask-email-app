@@ -4,45 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email App</title>
+    <title>{% block title %}Email App - Liquid Glass UI{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style-modular.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/liquid-glass.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     {% block head %}{% endblock %}
 </head>
-<body class="{% if session.get('theme') == 'dark' %}dark-mode{% endif %}">
+<body>
+    <!-- Floating Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
     <div class="app-container">
         {% if 'user_id' in session %}
-        <nav class="sidebar">
-            <a href="{{ url_for('email.compose') }}" class="compose-btn">
+        <nav class="sidebar glass-hover">
+            <a href="{{ url_for('email.compose') }}" class="compose-btn btn-liquid tooltip-liquid" data-tooltip="Tulis email baru">
                 <span class="material-icons">edit</span>
                 Tulis
             </a>
-            <a href="{{ url_for('email.inbox') }}" class="nav-item {% if request.endpoint == 'inbox' %}active{% endif %}">
+            <a href="{{ url_for('email.inbox') }}" class="nav-item {% if request.endpoint == 'email.inbox' %}active{% endif %} tooltip-liquid" data-tooltip="Kotak masuk">
                 <span class="material-icons">inbox</span>
                 Kotak Masuk
                 <span class="unread-badge" id="unreadBadge" style="display: none;"></span>
             </a>
-            <a href="{{ url_for('email.search') }}" class="nav-item {% if request.endpoint == 'search' %}active{% endif %}">
+            <a href="{{ url_for('email.search') }}" class="nav-item {% if request.endpoint == 'email.search' %}active{% endif %} tooltip-liquid" data-tooltip="Pencarian email">
                 <span class="material-icons">search</span>
                 Pencarian
             </a>
-            <a href="{{ url_for('email.sent') }}" class="nav-item {% if request.endpoint == 'sent' %}active{% endif %}">
+            <a href="{{ url_for('email.sent') }}" class="nav-item {% if request.endpoint == 'email.sent' %}active{% endif %} tooltip-liquid" data-tooltip="Email terkirim">
                 <span class="material-icons">send</span>
                 Terkirim
             </a>
-            <a href="{{ url_for('email.drafts') }}" class="nav-item {% if request.endpoint == 'drafts' %}active{% endif %}">
+            <a href="{{ url_for('email.drafts') }}" class="nav-item {% if request.endpoint == 'email.drafts' %}active{% endif %} tooltip-liquid" data-tooltip="Draft">
                 <span class="material-icons">drafts</span>
                 Draft
             </a>
-            <a href="{{ url_for('email.favorites') }}" class="nav-item {% if request.endpoint == 'favorites' %}active{% endif %}">
+            <a href="{{ url_for('email.favorites') }}" class="nav-item {% if request.endpoint == 'email.favorites' %}active{% endif %} tooltip-liquid" data-tooltip="Email favorit">
                 <span class="material-icons">star</span>
                 Favorit
             </a>
-            <a href="{{ url_for('profile.profile') }}" class="nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
+            <a href="{{ url_for('profile.profile') }}" class="nav-item {% if request.endpoint == 'profile.profile' %}active{% endif %} tooltip-liquid" data-tooltip="Profil pengguna">
                 <span class="material-icons">account_circle</span>
                 Profil
             </a>
-            <a href="{{ url_for('auth.logout') }}" class="nav-item">
+            
+            <a href="{{ url_for('auth.logout') }}" class="nav-item tooltip-liquid" data-tooltip="Keluar dari aplikasi">
                 <span class="material-icons">logout</span>
                 Keluar
             </a>
@@ -52,24 +64,27 @@
             {% if 'user_id' in session %}
             <div class="search-container">
                 <form action="{{ url_for('email.search') }}" method="GET" class="search-form">
-                    <div class="search-input-container">
+                    <div class="search-input-container glass-hover">
                         <span class="material-icons search-icon">search</span>
-                        <input type="text" name="q" placeholder="Cari email... (Ctrl+K)" value="{{ request.args.get('q', '') }}" class="search-input">
-                        <button type="submit" class="search-btn">Cari</button>
+                        <input type="text" name="q" placeholder="Cari email dengan efek liquid glass... (Ctrl+K)" value="{{ request.args.get('q', '') }}" class="search-input input-liquid">
+                        <button type="submit" class="search-btn btn-liquid">
+                            <span class="material-icons">search</span>
+                            Cari
+                        </button>
                     </div>
                 </form>
             </div>
             {% endif %}
-            <div class="header">
-                <div style="display: flex; align-items: center; gap: 16px;">
-                  <h2>{% block page_title %}{% endblock %}</h2>
+            <div class="header glass-card">
+                <div style="display: flex; align-items: center; gap: 20px; width: 100%;">
+                  <h1>{% block page_title %}{% endblock %}</h1>
                   {% if session.get('username') %}
-                    <span style="font-size: 1.1em; color: var(--primary); font-weight: 500;">Welcome, {{ session['username']}}</span>
+                    <span style="font-size: 16px; color: var(--primary); font-weight: 600; background: var(--glass-bg); padding: 8px 16px; border-radius: 20px; backdrop-filter: blur(8px); margin-left: auto;">
+                        <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 8px;">person</span>
+                        {{ session['username']}}
+                    </span>
                   {% endif %}
                 </div>
-                <button class="mode-toggle" id="modeToggle" onclick="toggleMode()">
-                    <span class="material-icons">dark_mode</span>
-                </button>
             </div>
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
@@ -83,18 +98,6 @@
     </div>
 
     <script>
-    function toggleMode() {
-        const body = document.body;
-        body.classList.toggle('dark-mode');
-        if(body.classList.contains('dark-mode')) {
-            localStorage.setItem('theme', 'dark');
-            document.querySelector('#modeToggle .material-icons').textContent = 'light_mode';
-        } else {
-            localStorage.setItem('theme', 'light');
-            document.querySelector('#modeToggle .material-icons').textContent = 'dark_mode';
-        }
-    }
-
     function updateUnreadCount() {
         fetch('/unread_count')
             .then(response => response.json())
@@ -103,36 +106,57 @@
                 if (data.count > 0) {
                     badge.textContent = data.count;
                     badge.style.display = 'inline-flex';
+                    // Add pulse animation for new messages
+                    badge.style.animation = 'pulse-glow 2s infinite';
                 } else {
                     badge.style.display = 'none';
+                    badge.style.animation = 'none';
                 }
-            });
+            })
+            .catch(error => console.log('Error fetching unread count:', error));
     }
 
-    (function() {
-        const theme = localStorage.getItem('theme');
-        if(theme === 'dark') {
-            document.body.classList.add('dark-mode');
-            document.querySelector('#modeToggle .material-icons').textContent = 'light_mode';
-        } else {
-            document.body.classList.remove('dark-mode');
-            document.querySelector('#modeToggle .material-icons').textContent = 'dark_mode';
-        }
+    // Enhanced Liquid Glass Effects
+    function initLiquidGlassEffects() {
+        // Add ripple effect to clickable elements
+        const clickableElements = document.querySelectorAll('.btn, .nav-item, .email-item, .compose-btn');
         
-        // Update unread count immediately and every 30 seconds
-        updateUnreadCount();
-        setInterval(updateUnreadCount, 30000);
-        
-        // Update unread count when the page becomes visible
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden) {
-                updateUnreadCount();
-            }
+        clickableElements.forEach(element => {
+            element.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple-effect');
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.6);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
         });
 
-        // Search shortcut: Ctrl/Cmd + K to focus search input
+        // Add keyboard shortcuts
         document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            // Ctrl+K for search focus
+            if (e.ctrlKey && e.key === 'k') {
                 e.preventDefault();
                 const searchInput = document.querySelector('.search-input');
                 if (searchInput) {
@@ -141,7 +165,177 @@
                 }
             }
         });
+
+        // Add floating particles on mouse move
+        let mouseTimeout;
+        document.addEventListener('mousemove', function(e) {
+            clearTimeout(mouseTimeout);
+            mouseTimeout = setTimeout(() => {
+                createFloatingParticle(e.clientX, e.clientY);
+            }, 100);
+        });
+    }
+
+    function createFloatingParticle(x, y) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            animation: particleFade 2s ease-out forwards;
+        `;
+        
+        document.body.appendChild(particle);
+        
+        setTimeout(() => {
+            particle.remove();
+        }, 2000);
+    }
+
+    // Add CSS animations dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes particleFade {
+            0% {
+                opacity: 0.8;
+                transform: scale(0) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1) translateY(-30px);
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize liquid glass effects when DOM is loaded
+    (function() {
+        console.log('Liquid Glass UI initialized'); // Debug log
+        
+        // Initialize liquid glass effects
+        initLiquidGlassEffects();
+        
+        // Update unread count immediately and every 30 seconds
+        if (typeof updateUnreadCount === 'function') {
+            updateUnreadCount();
+            setInterval(updateUnreadCount, 30000);
+            
+            // Update unread count when the page becomes visible
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    updateUnreadCount();
+                }
+            });
+        }
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in-out';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+        
+        // Initialize liquid glass effects
+        initLiquidGlassEffects();
+        
+        // Create floating particles
+        createFloatingParticles();
+        
+        // Create glass orbs
+        createGlassOrbs();
+        
+        // Update unread count immediately and every 30 seconds
+        if (typeof updateUnreadCount === 'function') {
+            updateUnreadCount();
+            setInterval(updateUnreadCount, 30000);
+        }
     })();
+
+    // Enhanced Floating Particles
+    function createFloatingParticles() {
+        const particleContainer = document.createElement('div');
+        particleContainer.className = 'floating-particles';
+        document.body.appendChild(particleContainer);
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random size
+            const size = Math.random() * 6 + 4; // 4-10px
+            particle.style.setProperty('--particle-size', `${size}px`);
+            
+            // Random duration
+            const duration = Math.random() * 10 + 10; // 10-20s
+            particle.style.setProperty('--float-duration', `${duration}s`);
+            
+            // Random start position
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.bottom = '-20px';
+            
+            // Random delay
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            
+            particleContainer.appendChild(particle);
+            
+            // Remove particle after animation
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, duration * 1000);
+        }
+
+        // Create particles continuously
+        setInterval(createParticle, 800);
+        
+        // Create initial particles
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createParticle, i * 200);
+        }
+    }
+
+    // Glass Orbs Background
+    function createGlassOrbs() {
+        const orbCount = 3;
+        for (let i = 0; i < orbCount; i++) {
+            const orb = document.createElement('div');
+            orb.className = 'glass-orb';
+            
+            // Random size
+            const size = Math.random() * 150 + 100; // 100-250px
+            orb.style.width = `${size}px`;
+            orb.style.height = `${size}px`;
+            
+            // Random position
+            orb.style.left = Math.random() * 80 + 10 + '%';
+            orb.style.top = Math.random() * 80 + 10 + '%';
+            
+            // Random animation delay
+            orb.style.animationDelay = Math.random() * 10 + 's';
+            
+            // Low z-index to stay behind content
+            orb.style.zIndex = '-1';
+            orb.style.position = 'fixed';
+            
+            document.body.appendChild(orb);
+        }
+    }
     </script>
 </body>
 </html>
