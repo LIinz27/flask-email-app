@@ -29,7 +29,7 @@
                 <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">message</span>
                 Pesan:
             </label>
-            <textarea id="message" name="message" class="tinymce-editor">{{ draft.message if draft else '' }}</textarea>
+            <textarea id="message" name="message" class="tinymce-editor">{{ draft.body if draft else '' }}</textarea>
         </div>
         <div style="display: flex; gap: 16px;">
             <button type="submit" name="action" value="send" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">

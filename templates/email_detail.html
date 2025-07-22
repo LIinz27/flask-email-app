@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="email-content">
-        {{ email.message|safe }}
+        {{ email.body|safe }}
     </div>
     <div style="margin-top: 24px;">
         <a href="{{ url_for('email.compose') }}?reply_to={{ email.sender_name }}&subject=Re: {{ email.subject }}" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">

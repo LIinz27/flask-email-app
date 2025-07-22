@@ -26,7 +26,7 @@
             </div>
             <div class="email-item-content">
                 <div class="email-subject">{{ email.subject }}</div>
-                <div class="email-preview">{{ email.message[:100] }}{% if email.message|length > 100 %}...{% endif %}</div>
+                <div class="email-preview">{{ email.body[:100] }}{% if email.body|length > 100 %}...{% endif %}</div>
             </div>
             <div class="email-item-actions">
                 <span class="material-icons text-warning">star</span>

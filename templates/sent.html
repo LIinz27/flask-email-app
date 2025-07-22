@@ -13,7 +13,7 @@
             </div>
             <div class="email-subject">
                 {{ email.subject }}
-                <span style="color: var(--secondary); margin-left: 8px;">- {{ email.message[:50] }}{% if email.message|length > 50 %}...{% endif %}</span>
+                <span style="color: var(--secondary); margin-left: 8px;">- {{ email.body[:50] }}{% if email.body|length > 50 %}...{% endif %}</span>
             </div>
             <div class="email-time">
                 {{ email.timestamp.strftime('%H:%M') if email.timestamp.date() == today else email.timestamp.strftime('%d/%m/%Y') }}
